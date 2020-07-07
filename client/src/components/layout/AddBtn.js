@@ -1,12 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+// import M from 'materialize-css/dist/js/materialize.min.js';
 import { clearTech } from '../../actions/techActions';
-function AddBtn({ clearTech }) {
+function AddBtn({ clearTech, techs }) {
+  // !const noTechs = () => {
+  //!   M.toast({ html: 'Please enter a technician first' });
+  // !};
   return (
     <div className='fixed-action-btn'>
       <a
         href='#add-log-modal'
-        className='btn-floating btn-large blue darken-2 modal-trigger'
+        className={`btn-floating btn-large blue darken-2 modal-trigger 
+        `}
+        // onClick={noTechs}
       >
         <i className='large material-icons'>add</i>
       </a>
@@ -33,4 +39,7 @@ function AddBtn({ clearTech }) {
   );
 }
 
+// const mapStateToProps = (state) => ({
+//   techs: state.tech.techs,
+// });
 export default connect(null, { clearTech })(AddBtn);

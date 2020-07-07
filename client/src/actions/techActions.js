@@ -18,7 +18,8 @@ export const setLoading = () => {
 export const getTechs = () => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch('/techs');
+    const res = await fetch('/it-logger/techs');
+
     const data = await res.json();
     dispatch({
       type: GET_TECHS,
@@ -43,7 +44,7 @@ export const updateTech = (tech) => async (dispatch) => {
   try {
     setLoading();
 
-    const res = await fetch(`/techs/${tech.id}`, {
+    const res = await fetch(`/it-logger/techs/${tech._id}`, {
       method: 'PUT',
       body: JSON.stringify(tech),
       headers: { 'Content-Type': 'application/json' },
@@ -68,7 +69,7 @@ export const clearTech = () => {
 export const addTech = (tech) => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch('/techs', {
+    const res = await fetch('/it-logger/techs', {
       method: 'POST',
       body: JSON.stringify(tech),
       headers: {
@@ -99,7 +100,7 @@ export const setTech = (tech) => {
 export const deleteTech = (id) => async (dispatch) => {
   try {
     setLoading();
-    await fetch(`/techs/${id}`, {
+    await fetch(`/it-logger/techs/${id}`, {
       method: 'DELETE',
     });
     dispatch({

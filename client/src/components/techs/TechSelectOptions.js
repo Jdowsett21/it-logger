@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getTechs } from '../../actions/techActions';
-function TechSelectOptions({ getTechs, tech: { techs, loading } }) {
+function TechSelectOptions({ getTechs, tech: { techs, loading }, category }) {
   useEffect(() => {
     getTechs();
     //eslint-disable-next-line
@@ -9,11 +9,18 @@ function TechSelectOptions({ getTechs, tech: { techs, loading } }) {
   return (
     !loading &&
     techs !== null &&
-    techs.map((t) => (
-      <option key={t.id} value={`${t.firstName} ${t.lastName}`}>
-        {t.firstName} {t.lastName}
-      </option>
-    ))
+    category !== '' &&
+    techs.map((t) =>
+      t.allSkills.map((skill) => {
+        if (skill === category) {
+          return (
+            <option key={t._id} value={`${t.firstName} ${t.lastName}`}>
+              {t.firstName} {t.lastName}
+            </option>
+          );
+        }
+      })
+    )
   );
 }
 const mapStateToProps = (state) => ({

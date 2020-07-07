@@ -1,5 +1,4 @@
 import {
-  UPDATE_TECH_IN_LOG,
   FIND_TECHS_LOGS,
   GET_LOGS,
   ADD_LOG,
@@ -17,7 +16,7 @@ import {
 export const addLog = (log) => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch('/logs', {
+    const res = await fetch('/it-logger/logs', {
       method: 'POST',
       body: JSON.stringify(log),
       headers: {
@@ -38,7 +37,7 @@ export const addLog = (log) => async (dispatch) => {
 export const getLogs = () => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch('/logs');
+    const res = await fetch('/it-logger/logs');
     const data = await res.json();
 
     dispatch({
@@ -72,7 +71,7 @@ export const clearCurrent = () => {
 export const searchLogs = (text) => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch(`/logs?q=${text}`);
+    const res = await fetch(`/it-logger/logs?q=${text}`);
     const data = await res.json();
     dispatch({ type: SEARCH_LOGS, payload: data });
   } catch (err) {
@@ -83,7 +82,7 @@ export const searchLogs = (text) => async (dispatch) => {
 export const deleteLog = (id) => async (dispatch) => {
   try {
     setLoading();
-    await fetch(`/logs/${id}`, {
+    await fetch(`/it-logger/logs/${id}`, {
       method: 'DELETE',
     });
 
@@ -98,30 +97,15 @@ export const deleteLog = (id) => async (dispatch) => {
 export const updateLog = (log) => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch(`/logs/${log.id}`, {
+    const res = await fetch(`/it-logger/logs/${log._id}`, {
       method: 'PUT',
       body: JSON.stringify(log),
       headers: { 'Content-Type': 'application/json' },
     });
+
     const data = await res.json();
 
     dispatch({ type: UPDATE_LOG, payload: data });
-  } catch (err) {
-    dispatch({ type: LOGS_ERROR, payload: err.response.data });
-  }
-};
-export const updateTechName = (tech, log) => async (dispatch) => {
-  try {
-    setLoading();
-
-    const res = await fetch(`/logs/${log.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(log),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const data = await res.json();
-
-    dispatch({ type: UPDATE_TECH_IN_LOG, payload: { data, tech } });
   } catch (err) {
     dispatch({ type: LOGS_ERROR, payload: err.response.data });
   }

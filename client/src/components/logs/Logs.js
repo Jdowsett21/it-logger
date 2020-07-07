@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Preloader from '../layout/Preloader';
 import LogItem from './LogItem';
 import PropTypes from 'prop-types';
-import { getLogs, updateTechName } from '../../actions/logActions.js';
+import { getLogs } from '../../actions/logActions.js';
 import { getTechs } from '../../actions/techActions.js';
 
 function Logs({ log: { logs, loading }, getLogs, getTechs }) {
@@ -12,7 +12,7 @@ function Logs({ log: { logs, loading }, getLogs, getTechs }) {
     getTechs();
 
     //eslint-disable-next-line
-  }, [updateTechName]);
+  }, []);
 
   if (loading || logs === null) {
     return <Preloader />;
@@ -25,7 +25,7 @@ function Logs({ log: { logs, loading }, getLogs, getTechs }) {
       {!loading && logs.length === 0 ? (
         <p className='center'>No logs to show</p>
       ) : (
-        logs.map((log) => <LogItem log={log} key={log.id} />)
+        logs.map((log) => <LogItem log={log} key={log._id} />)
       )}
     </ul>
   );
@@ -39,6 +39,4 @@ const mapStateToProps = (state) => ({
   log: state.log,
 });
 //then we need to pass it into connect
-export default connect(mapStateToProps, { getLogs, getTechs, updateTechName })(
-  Logs
-);
+export default connect(mapStateToProps, { getLogs, getTechs })(Logs);

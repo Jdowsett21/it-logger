@@ -2,7 +2,6 @@ import {
   DELETE_LOG,
   FIND_TECHS_LOGS,
   SEARCH_LOGS,
-  UPDATE_TECH_IN_LOG,
   GET_LOGS,
   SET_CURRENT,
   CLEAR_CURRENT,
@@ -18,6 +17,7 @@ const initialState = {
   loading: false,
   error: null,
   oneTechLogs: null,
+  categories: ['Server', 'Hard drive', 'Software', 'Development', 'Html'],
 };
 
 export default (state = initialState, action) => {
@@ -70,7 +70,7 @@ export default (state = initialState, action) => {
     case DELETE_LOG:
       return {
         ...state,
-        logs: state.logs.filter((log) => action.payload !== log.id),
+        logs: state.logs.filter((log) => log._id !== action.payload),
         loading: false,
       };
 
@@ -88,23 +88,10 @@ export default (state = initialState, action) => {
       return {
         ...state,
         logs: state.logs.map((log) =>
-          log.id === action.payload.id ? action.payload : log
+          log._id === action.payload._id ? action.payload : log
         ),
       };
-    case UPDATE_TECH_IN_LOG:
-      return {
-        ...state,
-        logs: state.logs.map((log) => {
-          if (log.id === action.payload.data.id) {
-            action.payload.data.tech = `${action.payload.tech.firstName} ${action.payload.tech.lastName}`;
-            log.tech = `${action.payload.tech.firstName} ${action.payload.tech.lastName}`;
-            return action.payload.data;
-          } else {
-            return log;
-          }
-        }),
-        loading: false,
-      };
+
     default:
       return state;
   }

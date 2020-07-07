@@ -54,7 +54,7 @@ export default (state = initialState, action) => {
     case DELETE_TECH:
       return {
         ...state,
-        techs: state.techs.filter((tech) => tech.id !== action.payload),
+        techs: state.techs.filter((tech) => tech._id !== action.payload),
         loading: false,
       };
 
@@ -67,7 +67,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         techs: state.techs.map((tech) =>
-          tech.id === action.payload.id ? action.payload : tech
+          tech._id === action.payload._id ? action.payload : tech
         ),
         loading: false,
       };

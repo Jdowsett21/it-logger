@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux';
 import logReducer from './logReducer';
 import techReducer from './techReducer';
-//log is basically what we are calling the state object from that reducer
+import authReducer from './authReducer';
+import fetchReducer from './fetchReducer';
+
 export default combineReducers({
   log: logReducer,
   tech: techReducer,
+  auth: authReducer,
+  fetch: fetchReducer,
 });

@@ -7,7 +7,7 @@ import { setTech } from '../../actions/techActions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 function LogItem({ log, deleteLog, setTech, setCurrent }) {
   const onDelete = () => {
-    deleteLog(log.id);
+    deleteLog(log._id);
     M.toast({ html: 'Item deleted' });
   };
   return (
@@ -24,7 +24,7 @@ function LogItem({ log, deleteLog, setTech, setCurrent }) {
         </a>
         <br />
         <span className='grey-text'>
-          <span className='black-text'>ID # {log.id}</span> Last updated by{' '}
+          Last updated by{' '}
           <span
             href='#add-tech-modal'
             className='modal-trigger black-text'
@@ -33,8 +33,18 @@ function LogItem({ log, deleteLog, setTech, setCurrent }) {
           >
             {log.tech}
           </span>{' '}
-          on <Moment format='MMMM Do YYYY, h:mm:ss:a'>{log.date}</Moment>
+          on{' '}
+          <Moment
+            style={{ paddingRight: '1em' }}
+            format='MMMM Do YYYY, h:mm:ss:a'
+          >
+            {log.date}
+          </Moment>
         </span>
+        <span className='grey-text' style={{ textAlign: 'right' }}>
+          Skill Required: <span className='black-text'>{log.category}</span>
+        </span>
+
         <a href='#!' className='secondary-content'>
           <i className='material-icons grey-text' onClick={onDelete}>
             delete

@@ -1,16 +1,25 @@
 const mongoose = require('mongoose');
 
 const logSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+  },
   attention: {
     type: Boolean,
     default: true,
   },
   tech: {
-    techSchema,
-  },
-  issue: {
     type: String,
     required: true,
+  },
+  category: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now(),
   },
 });
 

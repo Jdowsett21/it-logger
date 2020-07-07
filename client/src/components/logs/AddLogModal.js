@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import TechSelectOptions from '../techs/TechSelectOptions';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { addLog } from '../../actions/logActions';
 import { getTechs } from '../../actions/techActions';
+import CategorySelectOptions from './CategorySelectOptions';
 
 function AddLogModal({ addLog }) {
   const [message, setMessage] = useState('');
   const [attention, setAttention] = useState(false);
   const [tech, setTech] = useState('');
+  const [category, setCategories] = useState('');
 
   const onSubmit = () => {
     if (message === '' || tech === '') {
@@ -19,6 +20,7 @@ function AddLogModal({ addLog }) {
         message,
         attention,
         tech,
+        category,
         date: new Date(),
       };
 
@@ -27,6 +29,7 @@ function AddLogModal({ addLog }) {
       addLog(newLog);
       setMessage('');
       setTech('');
+      setCategories('');
       setAttention(false);
     }
   };
@@ -49,21 +52,37 @@ function AddLogModal({ addLog }) {
           <div className='row'>
             <div className='input-field'>
               <select
+                name='category'
+                value={category}
+                className='browser-default'
+                onChange={(e) => {
+                  setCategories(e.target.value);
+                }}
+              >
+                <option value=''>Skill Required</option>
+                <CategorySelectOptions />
+              </select>
+            </div>
+          </div>
+          <div className='row'>
+            <div className='input-field'>
+              <select
                 name='tech'
                 value={tech}
                 className='browser-default'
                 onChange={(e) => setTech(e.target.value)}
+                disabled={category === '' ? true : false}
               >
                 <option value='' disabled>
                   Select Technician
                 </option>
-                <TechSelectOptions />
+                <TechSelectOptions category={category} />
               </select>
             </div>
           </div>
           <div className='input-field'>
             <p>
-              <label htmlFor=''>
+              <label>
                 <input
                   type='checkbox'
                   checked={attention}
@@ -81,6 +100,7 @@ function AddLogModal({ addLog }) {
         <a
           href='#!'
           onClick={onSubmit}
+          disabled={tech === '' ? true : false}
           className='modal-close waves-effect blue btn'
         >
           Enter
@@ -89,11 +109,6 @@ function AddLogModal({ addLog }) {
     </div>
   );
 }
-
-AddLogModal.propTypes = {
-  addLog: PropTypes.func.isRequired,
-  getTechs: PropTypes.func.isRequired,
-};
 
 const modalStyle = {
   width: '75%',

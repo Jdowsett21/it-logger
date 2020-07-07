@@ -1,46 +1,91 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { setTech, updateTech } from '../../actions/techActions';
-import { updateTechName, setLoading } from '../../actions/logActions';
-
-import { findTechLogs, getLogs } from '../../actions/logActions';
+import { updateTech } from '../../actions/techActions';
+import { updateLog, setLoading } from '../../actions/logActions';
+import M from 'materialize-css/dist/js/materialize.min.js';
+import { findTechLogs } from '../../actions/logActions';
 import { Fragment } from 'react';
 function EditTechModal({
   tech: { selectedTech },
   oneTechLogs,
   findTechLogs,
-  updateTechName,
+  updateLog,
   updateTech,
 }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [skills, setSkill] = useState([]);
 
   useEffect(() => {
     if (selectedTech !== null && selectedTech.length > 0) {
       setFirstName(selectedTech[0].firstName);
       setLastName(selectedTech[0].lastName);
       findTechLogs(selectedTech[0].firstName, selectedTech[0].lastName);
+
+      let skills = [
+        { skill: 'Server', acquired: false },
+        { skill: 'Hard Drive', acquired: false },
+        { skill: 'Software', acquired: false },
+        { skill: 'Development', acquired: false },
+        { skill: 'Html', acquired: false },
+      ];
+
+      skills.map((data) => {
+        // selectedTech[0].allSkills.map((d) => {
+        //   if (data.tech === d) {
+        //     return {
+        //       skill: data.skill,
+        //       acquired: true,
+        //     };
+        //   } else {
+        return {
+          skill: data.skill,
+          acquired: data.acquired,
+        };
+        // }
+      });
+      // });
+
+      setSkill(skills);
     }
   }, [selectedTech, findTechLogs]);
 
   const onSubmit = () => {
-    const updatedTech = {
-      id: selectedTech[0].id,
-      firstName,
-      lastName,
-    };
+    if (firstName === '' || lastName === '') {
+      M.toast({ html: 'Please fill out first and last name' });
+    }
 
-    updateTech(updatedTech);
-    setTech(`${updatedTech.firstName} ${updatedTech.lastName}`);
-    oneTechLogs.map((log) => {
-      return updateTechName(updatedTech, log);
-    });
+    // if (allSkills.length === 0) {
+    //   M.toast({ html: 'You must add a skill before adding a technician' });
+    else {
+      let allSkills = skills.map((d) => {
+        if (d.acquired) return d.skill;
+      });
+      allSkills = allSkills.filter(Boolean);
+      const updatedTech = {
+        _id: selectedTech[0]._id,
+        firstName,
+        lastName,
+        allSkills,
+      };
+      updateTech(updatedTech);
 
-    setFirstName('');
+      oneTechLogs.map((log) => {
+        let newLog = {
+          _id: log._id,
+          message: log.message,
+          attention: log.attention,
+          tech: `${firstName} ${lastName}`,
+          category: log.category,
+        };
+        updateLog(newLog);
+      });
 
-    setLastName('');
+      setFirstName('');
+      setLastName('');
+      setSkill('');
+    }
   };
-
   return (
     <Fragment>
       <div className='modal-content'>
@@ -66,6 +111,33 @@ function EditTechModal({
           </div>
         </div>
       </div>
+      <span>Edit Technician Skills</span>
+      {skills.map((d) => (
+        <div className='input-field' key={d.skill}>
+          <p>
+            <label>
+              <input
+                type='checkbox'
+                checked={d.acquired}
+                value={d.acquired}
+                className='filled-in'
+                onChange={(e) => {
+                  let checked = e.target.checked;
+                  setSkill(
+                    skills.map((data) => {
+                      if (d.skill === data.skill) {
+                        data.acquired = checked;
+                      }
+                      return data;
+                    })
+                  );
+                }}
+              />
+              <span>{d.skill}</span>
+            </label>
+          </p>
+        </div>
+      ))}
       <div className='modal-footer'>
         <a
           href='#!'
@@ -85,7 +157,7 @@ const mapStatetoProps = (state) => ({
 
 export default connect(mapStatetoProps, {
   updateTech,
-  updateTechName,
+  updateLog,
   findTechLogs,
   setLoading,
 })(EditTechModal);

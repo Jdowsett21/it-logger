@@ -1,22 +1,20 @@
-const mongoose = require('mongoose')
-
+const mongoose = require('mongoose');
 
 const techSchema = new mongoose.Schema({
-    firstName : {
-        type: String,
-        required: true
-        minlength: 3,
-        maxlength: 50
-    },
-    lastName: {
-        type: String,
-        required: true,
-        minlength: 3,
-        maxlength: 50
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  allSkills: {
+    type: Array,
+    required: true,
+  },
+});
 
-    }
-})
+const Tech = mongoose.model('tech', techSchema, 'tech');
 
-const Tech = mongoose.model('tech', techSchema)
-
-module.exports = Tech
+module.exports = Tech;
