@@ -2,11 +2,17 @@ import React, { useEffect } from 'react';
 import TechItem from './TechItem';
 import { getTechs } from '../../actions/techActions';
 import { connect } from 'react-redux';
+import { isUserAuthenticated } from '../../actions/authActions';
 
-function TechListModal({ getTechs, tech: { loading, techs } }) {
+function TechListModal({
+  getTechs,
+  isUserAuthenticated,
+  tech: { loading, techs },
+}) {
   useEffect(() => {
+    isUserAuthenticated();
     getTechs();
-  }, [getTechs]);
+  }, []);
   return (
     <div id='tech-list-modal' className='modal'>
       <div className='modal-content'>
@@ -25,4 +31,6 @@ const mapStateToProps = (state) => ({
   tech: state.tech,
 });
 
-export default connect(mapStateToProps, { getTechs })(TechListModal);
+export default connect(mapStateToProps, { getTechs, isUserAuthenticated })(
+  TechListModal
+);

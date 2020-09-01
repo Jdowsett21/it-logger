@@ -1,23 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const Tech = require('../models/tech');
-const asyncMiddleware = require('../middleware/async');
 
 router.get('/', async (req, res) => {
   const techs = await Tech.find();
   res.send(techs);
 });
 
-router.post(
-  '/',
-  asyncMiddleware(async (req, res) => {
-    let tech = new Tech(req.body);
+router.post('/', async (req, res) => {
+  let tech = new Tech(req.body);
 
-    await tech.save();
+  await tech.save();
 
-    res.send(tech);
-  })
-);
+  res.send(tech);
+});
 
 router.put('/:id', async (req, res) => {
   const techs = await Tech.findByIdAndUpdate(

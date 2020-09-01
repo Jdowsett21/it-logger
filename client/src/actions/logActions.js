@@ -11,19 +11,12 @@ import {
   SET_CURRENT,
 } from './types';
 
-//Get logs from server
+import { authAxios } from '../utils/authFetch';
 
 export const addLog = (log) => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch('/it-logger/logs', {
-      method: 'POST',
-      body: JSON.stringify(log),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await res.json();
+    const { data } = await authAxios.post('/logs', log);
 
     dispatch({
       type: ADD_LOG,
@@ -37,8 +30,7 @@ export const addLog = (log) => async (dispatch) => {
 export const getLogs = () => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch('/it-logger/logs');
-    const data = await res.json();
+    const { data } = await authAxios.get('/logs');
 
     dispatch({
       type: GET_LOGS,
@@ -71,8 +63,12 @@ export const clearCurrent = () => {
 export const searchLogs = (text) => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch(`/it-logger/logs?q=${text}`);
-    const data = await res.json();
+
+    const { data } = await authAxios.get(`/logs`, {
+      params: {
+        text,
+      },
+    });
     dispatch({ type: SEARCH_LOGS, payload: data });
   } catch (err) {
     dispatch({ type: LOGS_ERROR, payload: err.response.data });
@@ -82,9 +78,7 @@ export const searchLogs = (text) => async (dispatch) => {
 export const deleteLog = (id) => async (dispatch) => {
   try {
     setLoading();
-    await fetch(`/it-logger/logs/${id}`, {
-      method: 'DELETE',
-    });
+    await authAxios.delete(`/logs/${id}`);
 
     dispatch({
       type: DELETE_LOG,
@@ -97,13 +91,7 @@ export const deleteLog = (id) => async (dispatch) => {
 export const updateLog = (log) => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch(`/it-logger/logs/${log._id}`, {
-      method: 'PUT',
-      body: JSON.stringify(log),
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    const data = await res.json();
+    const { data } = await authAxios.put(`/logs/${log._id}`, log);
 
     dispatch({ type: UPDATE_LOG, payload: data });
   } catch (err) {

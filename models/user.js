@@ -29,14 +29,14 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    validator(value) {
-      if (value.toLowerCase().includes('password'))
-        throw new Error('Invalid Password');
-    },
+    //   validator(value) {
+    //     if (value.toLowerCase().includes('password'))
+    //       throw new Error('Invalid Password');
+    //   },
   },
   role: {
     type: String,
-    default: 'user',
+    default: 'admin',
     required: true,
   },
   tokens: [
@@ -57,9 +57,15 @@ userSchema.methods.generateAuthToken = async function () {
   }
   const token = jwt.sign(
     {
-      _id: user._id.toString(),
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      streetName: user.streetName,
+      streetNumber: user.streetNumber,
       email: user.email,
       role: user.role,
+      iss: 'api.it-logger',
+      aud: 'api.it-logger',
     },
     process.env.JWT_SECRET,
     { algorithm: 'HS256', expiresIn: '1hr' }
@@ -74,10 +80,10 @@ userSchema.methods.generateAuthToken = async function () {
 
 userSchema.statics.findByCredentials = async function (email, password) {
   const user = await User.findOne({ email });
-  if (!user) return res.status(400).send('Invalid email or password');
+  if (!user) throw new Error('Invalid email or password');
 
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.status(400).send('Invalid email or password');
+  if (!isMatch) throw new Error('Invalid email or password');
 
   return user;
 };
@@ -86,9 +92,9 @@ const User = mongoose.model('User', userSchema);
 
 function validateUser(user) {
   const schema = Joi.object({
-    firstName: Joi.string().min(5).max(20).required(),
-    lastName: Joi.string().min(5).max(20).required(),
-    email: Joi.string().min(8).max(50).email().required(),
+    firstName: Joi.string().min(3).max(20).required(),
+    lastName: Joi.string().min(3).max(20).required(),
+    email: Joi.string().min(3).max(50).email().required(),
     password: Joi.string().min(5).max(20).required(),
   });
   return schema.validate(user);

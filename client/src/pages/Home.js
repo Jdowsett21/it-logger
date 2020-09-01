@@ -1,28 +1,31 @@
-import React, { Fragment } from 'react';
-import AddBtn from '../components/layout/AddBtn';
-import AddLogModal from '../components/logs/AddLogModal';
-import EditLogModal from '../components/logs/EditLogModal';
-import TechModal from '../components/techs/TechModal';
-import TechListModal from '../components/techs/TechListModal';
-import NonAuthNavBar from '../components/layout/NonAuthNavBar';
-import Logs from '../components/logs/Logs';
-import AppSearchBar from '../components/layout/AppSearchBar';
+import React, { useEffect } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { isUserAuthenticated, setAuthInfo } from '../actions/authActions';
 
-function Home(props) {
+function Home({
+  auth: { isAuthenticated, expiresAt },
+  isUserAuthenticated,
+  setAuthInfo,
+}) {
+  useEffect(() => {
+    isUserAuthenticated();
+    setAuthInfo();
+  }, [expiresAt]);
+
   return (
-    <Fragment>
-      {/* <NonAuthNavBar />  */}
-      <AppSearchBar />
-      <div className='container'>
-        <AddBtn />
-        <AddLogModal />
-        <EditLogModal />
-        <TechModal />
-        <TechListModal />
-        <Logs />
-      </div>
-    </Fragment>
+    <div>
+      {isAuthenticated && <Redirect to='/dashboard' />}
+      <Link to='/login'>Login</Link>
+      <Link to='/signup'>Signup</Link>
+    </div>
   );
 }
 
-export default Home;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+export default connect(mapStateToProps, {
+  isUserAuthenticated,
+  setAuthInfo,
+})(Home);

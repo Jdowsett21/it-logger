@@ -4,6 +4,7 @@ const logSchema = new mongoose.Schema({
   message: {
     type: String,
     required: true,
+    text: true,
   },
   attention: {
     type: Boolean,
@@ -12,10 +13,12 @@ const logSchema = new mongoose.Schema({
   tech: {
     type: String,
     required: true,
+    text: true,
   },
   category: {
     type: String,
     required: true,
+    text: true,
   },
   date: {
     type: Date,

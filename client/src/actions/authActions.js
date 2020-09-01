@@ -1,34 +1,91 @@
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_FAIL,
+  IS_ADMIN,
+  LOGIN_ERROR,
+  USER_LOADED,
+  LOADING,
+  IS_AUTHENTICATED,
+  REDIRECT_ON_LOGIN,
+  SIGNUP_SUCCESS,
+  SIGNUP_ERROR,
   LOGOUT,
-  CLEAR_ERRORS,
 } from '../actions/types';
 
-//register success
-const registerSuccess = () => {};
+import { publicFetch } from '../utils/fetch';
+import { authAxios } from '../utils/authFetch';
+export const signupValidation = (credentials) => async (dispatch) => {
+  try {
+    setLoading();
+    const { data } = await publicFetch.post('auth/signup', credentials);
+    dispatch({
+      type: SIGNUP_SUCCESS,
+      payload: data,
+    });
 
-//register fail
-const registerFail = () => {};
+    setTimeout(() => {
+      return {
+        type: REDIRECT_ON_LOGIN,
+      };
+    }, 700);
+  } catch (err) {
+    setLoading();
+    dispatch({
+      type: SIGNUP_ERROR,
+      payload: err.data.message,
+    });
+  }
+};
 
-//user loaded
-const userLoaded = () => {};
+export const isAdmin = () => {
+  return {
+    type: IS_ADMIN,
+  };
+};
 
-//auth error
-const authError = () => {};
+export const logout = () => {
+  return {
+    type: LOGOUT,
+  };
+};
+export const isUserAuthenticated = () => {
+  return {
+    type: IS_AUTHENTICATED,
+  };
+};
+export const setAuthInfo = () => async (dispatch) => {
+  const { data } = await authAxios.get('/users/me');
+  dispatch({
+    type: USER_LOADED,
+    payload: data,
+  });
+};
 
-//login success
-const loginSuccess = () => {};
+const setLoading = () => {
+  return {
+    type: LOADING,
+  };
+};
 
-//login fail
-const loginFail = () => {};
+export const loginValidation = (credentials) => async (dispatch) => {
+  try {
+    setLoading();
+    const { data } = await publicFetch.post('auth/login', credentials);
 
-//logout
-const logout = () => {};
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: data,
+    });
 
-//clear errors
-const clearErrors = () => {};
+    setTimeout(() => {
+      return {
+        type: REDIRECT_ON_LOGIN,
+      };
+    }, 700);
+  } catch (err) {
+    setLoading();
+    dispatch({
+      type: LOGIN_ERROR,
+      payload: err.data.message,
+    });
+  }
+};

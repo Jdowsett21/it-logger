@@ -27,7 +27,7 @@ function LogItem({ log, deleteLog, setTech, setCurrent }) {
           Last updated by{' '}
           <span
             href='#add-tech-modal'
-            className='modal-trigger black-text'
+            className='modal-trigger blue-text'
             style={{ cursor: 'pointer' }}
             onClick={() => setTech(log.tech)}
           >

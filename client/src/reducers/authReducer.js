@@ -1,55 +1,117 @@
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
+  SIGNUP_SUCCESS,
+  IS_ADMIN,
+  SIGNUP_ERROR,
   USER_LOADED,
-  AUTH_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_FAIL,
+  IS_AUTHENTICATED,
+  LOGIN_ERROR,
+  LOADING,
+  REDIRECT_ON_LOGIN,
   LOGOUT,
-  CLEAR_ERRORS,
 } from '../actions/types';
 
 const initialState = {
-  token: '',
-  isAuthenticated: null,
-  loading: true,
-  user: null,
-  error: null,
+  token: null,
+  expiresAt: localStorage.getItem('expiresAt'),
+  userInfo: JSON.parse(localStorage.getItem('userInfo')),
+  loginSuccess: false,
+  signupSuccess: false,
+  signupError: '',
+  loginError: '',
+  loading: false,
+  isAuthenticated: false,
+  redirectOnLogin: false,
+  isAdmin: false,
 };
 export default (state = initialState, action) => {
   switch (action.type) {
+    case LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
     case LOGOUT:
-    case LOGIN_FAIL:
-    case AUTH_ERROR:
-    case REGISTER_FAIL:
-      //remove token
+      localStorage.removeItem('expiresAt');
+      localStorage.removeItem('userInfo');
       return {
         ...state,
         token: null,
+        expiresAt: null,
+        userInfo: {},
+        signupSuccess: '',
+        loginSuccess: '',
         isAuthenticated: false,
-        user: null,
         loading: false,
+        redirectOnLogin: false,
+        isAdmin: false,
       };
+    case LOGIN_ERROR:
+      return {
+        ...state,
+        loading: false,
+        loginError: action.payload.error.message,
+      };
+    case SIGNUP_ERROR:
+      return {
+        ...state,
+        userInfo: null,
+        loading: false,
+        signupError: action.payload.error.message,
+      };
+
     case USER_LOADED:
       return {
         ...state,
-        isAuthenticated: true,
+        token: action.payload.tokens[action.payload.tokens.length - 1].token,
+        userInfo: JSON.parse(localStorage.getItem('userInfo')),
+        // token: action.payload.token,
+        expiresAt: localStorage.getItem('expiresAt'),
         loading: false,
-        user: action.payload,
-      };
-    case CLEAR_ERRORS:
-      return {
-        ...state,
-        errors: null,
       };
     case LOGIN_SUCCESS:
-    case REGISTER_SUCCESS:
-      //do something with token
       return {
         ...state,
-        ...action.payload,
-        isAuthenticated: true,
-        loading: true,
+        token: action.payload.token,
+        expiresAt: localStorage.setItem('expiresAt', action.payload.expiresAt),
+        userInfo: localStorage.setItem(
+          'userInfo',
+          JSON.stringify(action.payload.userInfo)
+        ),
+        loginSuccess: action.payload.message,
+        loading: false,
+        redirectOnLogin: true,
+      };
+    case IS_AUTHENTICATED:
+      return {
+        ...state,
+        isAuthenticated:
+          new Date().getTime() / 1000 < state.expiresAt ? true : false,
+      };
+    case IS_ADMIN:
+      return {
+        ...state,
+        isAdmin:
+          state.userInfo && state.userInfo.role === 'admin' ? true : false,
+      };
+    case SIGNUP_SUCCESS:
+      return {
+        ...state,
+        token: action.payload.token,
+        expiresAt: localStorage.setItem('expiresAt', action.payload.expiresAt),
+        userInfo: localStorage.setItem(
+          'userInfo',
+          JSON.stringify(action.payload.userInfo)
+        ),
+        signupSuccess: action.payload.message,
+        loading: false,
+        redirectOnLogin: true,
+      };
+
+    case REDIRECT_ON_LOGIN:
+      return {
+        ...state,
+        redirectOnLogin: true,
       };
     default:
       return state;

@@ -5,7 +5,17 @@ const asyncMiddleware = require('../middleware/async');
 
 router.get('/', async (req, res) => {
   const log = await Log.find();
-  res.send(log);
+
+  const text = req.query.text;
+  if (!text) {
+    return res.send(log);
+  } else {
+    const filteredLogs = await Log.find({
+      $text: { $search: `"\"${text}\""` },
+    });
+
+    res.send(filteredLogs);
+  }
 });
 
 router.post('/', async (req, res) => {

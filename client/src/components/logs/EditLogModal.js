@@ -4,19 +4,23 @@ import TechSelectOptions from '../techs/TechSelectOptions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import { updateLog } from '../../actions/logActions';
 import { connect } from 'react-redux';
+import { isUserAuthenticated } from '../../actions/authActions';
 import CategorySelectOptions from './CategorySelectOptions';
-function EditLogModal({ currentLog, updateLog }) {
+function EditLogModal({ isUserAuthenticated, currentLog, updateLog }) {
   const [message, setMessage] = useState('');
   const [attention, setAttention] = useState(false);
   const [tech, setTech] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategories] = useState('');
 
+  useEffect(() => {
+    isUserAuthenticated();
+  });
   useEffect(() => {
     if (currentLog) {
       setMessage(currentLog.message);
       setAttention(currentLog.attention);
       setTech(currentLog.tech);
-      setCategory(currentLog.category);
+      setCategories(currentLog.category);
     }
   }, [currentLog]);
 
@@ -36,7 +40,7 @@ function EditLogModal({ currentLog, updateLog }) {
       M.toast({ html: `Log updated by ${tech}` });
       setMessage('');
       setTech('');
-      setCategory('');
+      setCategories('');
       setAttention(false);
     }
   };
@@ -52,6 +56,24 @@ function EditLogModal({ currentLog, updateLog }) {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
+            <label htmlFor='message' className='active'>
+              Log Message
+            </label>
+          </div>
+          <div className='row'>
+            <div className='input-field'>
+              <select
+                name='category'
+                value={category}
+                className='browser-default'
+                onChange={(e) => {
+                  setCategories(e.target.value);
+                }}
+              >
+                <option value=''>Skill Required</option>
+                <CategorySelectOptions />
+              </select>
+            </div>
           </div>
           <div className='row'>
             <div className='input-field'>
@@ -60,30 +82,15 @@ function EditLogModal({ currentLog, updateLog }) {
                 value={tech}
                 className='browser-default'
                 onChange={(e) => setTech(e.target.value)}
+                disabled={category === '' ? true : false}
               >
                 <option value='' disabled>
                   Select Technician
                 </option>
-                <TechSelectOptions />
+                <TechSelectOptions category={category} />
               </select>
             </div>
           </div>
-          <div className='row'>
-            <div className='input-field'>
-              <select
-                name='tech'
-                value={category}
-                className='browser-default'
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option value='' disabled>
-                  Select Category
-                </option>
-                <CategorySelectOptions />
-              </select>
-            </div>
-          </div>
-
           <div className='input-field'>
             <p>
               <label>
@@ -104,6 +111,7 @@ function EditLogModal({ currentLog, updateLog }) {
         <a
           href='#!'
           onClick={onSubmit}
+          disabled={tech === '' ? true : false}
           className='modal-close waves-effect blue btn'
         >
           Enter
@@ -113,7 +121,6 @@ function EditLogModal({ currentLog, updateLog }) {
   );
 }
 EditLogModal.propTypes = {
-  currentLog: PropTypes.object.isRequired,
   updateLog: PropTypes.func.isRequired,
 };
 const modalStyle = {
@@ -124,4 +131,6 @@ const mapStateToProps = (state) => ({
   currentLog: state.log.currentLog,
 });
 
-export default connect(mapStateToProps, { updateLog })(EditLogModal);
+export default connect(mapStateToProps, { updateLog, isUserAuthenticated })(
+  EditLogModal
+);

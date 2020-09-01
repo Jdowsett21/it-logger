@@ -2,21 +2,30 @@ import React, { Fragment, useState, useEffect } from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import { connect } from 'react-redux';
 import { addTech } from '../../actions/techActions';
+import { isUserAuthenticated } from '../../actions/authActions';
 
-function AddTechModal({ addTech }) {
+function AddTechModal({ addTech, isUserAuthenticated }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [skills, setSkill] = useState([]);
+  const [skills, setSkill] = useState([
+    { skill: 'Server', acquired: false },
+    { skill: 'Hard Drive', acquired: false },
+    { skill: 'Software', acquired: false },
+    { skill: 'Development', acquired: false },
+    { skill: 'Html', acquired: false },
+  ]);
+  //eslint-disable-next-line
+  const [role, setRole] = useState('1');
 
   useEffect(() => {
-    let skills = [
+    isUserAuthenticated();
+    const skills = [
       { skill: 'Server', acquired: false },
       { skill: 'Hard Drive', acquired: false },
       { skill: 'Software', acquired: false },
       { skill: 'Development', acquired: false },
       { skill: 'Html', acquired: false },
     ];
-
     skills.map((s) => {
       return {
         skill: s.skill,
@@ -34,11 +43,11 @@ function AddTechModal({ addTech }) {
         if (d.acquired) return d.skill;
       });
       allSkills = allSkills.filter(Boolean);
-      console.log('onSubmit -> allSkills', allSkills);
 
       const tech = {
         firstName,
         lastName,
+        role,
         allSkills,
       };
 
@@ -52,7 +61,7 @@ function AddTechModal({ addTech }) {
 
   return (
     <Fragment>
-      <div className='modal-content'>
+      <div id='add-tech-modal' className='modal-content'>
         <h4>New Technician</h4>
         <div className='row'>
           <div className='input-field'>
@@ -81,34 +90,55 @@ function AddTechModal({ addTech }) {
             />
           </div>
         </div>
-        <span>Select Technicians skills</span>
-
-        {skills.map((d) => (
-          <div className='input-field' key={d.skill}>
-            <p>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={d.acquired}
-                  value={d.acquired}
-                  className='filled-in'
-                  onChange={(e) => {
-                    let checked = e.target.checked;
-                    setSkill(
-                      skills.map((data) => {
-                        if (d.skill === data.skill) {
-                          data.acquired = checked;
-                        }
-                        return data;
-                      })
-                    );
-                  }}
-                />
-                <span>{d.skill}</span>
-              </label>
-            </p>
+        <div className='row'>
+          <div className='input-field'>
+            <select
+              defaultValue='1'
+              onChange={(e) => {
+                setRole(e.target.value);
+              }}
+            >
+              <option name='user' value='1'>
+                User
+              </option>
+              <option name='admin' value='2'>
+                Admin
+              </option>
+            </select>
+            <label>Select Role</label>
           </div>
-        ))}
+        </div>
+
+        <div className='row'>
+          <span>Select Technicians skills</span>
+
+          {skills.map((d) => (
+            <div className='input-field' key={d.skill}>
+              <p className='m-2'>
+                <label>
+                  <input
+                    type='checkbox'
+                    checked={d.acquired}
+                    value={d.acquired}
+                    className='filled-in'
+                    onChange={(e) => {
+                      let checked = e.target.checked;
+                      setSkill(
+                        skills.map((data) => {
+                          if (d.skill === data.skill) {
+                            data.acquired = checked;
+                          }
+                          return data;
+                        })
+                      );
+                    }}
+                  />
+                  <span>{d.skill}</span>
+                </label>
+              </p>
+            </div>
+          ))}
+        </div>
         <div className='modal-footer'>
           <a
             href='#!'
@@ -125,4 +155,5 @@ function AddTechModal({ addTech }) {
 
 export default connect(null, {
   addTech,
+  isUserAuthenticated,
 })(AddTechModal);

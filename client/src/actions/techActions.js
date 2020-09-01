@@ -9,6 +9,7 @@ import {
   TECHS_ERROR,
   SET_LOADING,
 } from '../actions/types';
+import { authAxios } from '../utils/authFetch';
 
 export const setLoading = () => {
   return {
@@ -18,9 +19,8 @@ export const setLoading = () => {
 export const getTechs = () => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch('/it-logger/techs');
+    const { data } = await authAxios.get('/techs');
 
-    const data = await res.json();
     dispatch({
       type: GET_TECHS,
       payload: data,
@@ -44,13 +44,8 @@ export const updateTech = (tech) => async (dispatch) => {
   try {
     setLoading();
 
-    const res = await fetch(`/it-logger/techs/${tech._id}`, {
-      method: 'PUT',
-      body: JSON.stringify(tech),
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const { data } = await authAxios.put(`/techs/${tech._id}`, tech);
 
-    const data = await res.json();
     setLoading();
     dispatch({
       type: UPDATE_TECH,
@@ -69,14 +64,8 @@ export const clearTech = () => {
 export const addTech = (tech) => async (dispatch) => {
   try {
     setLoading();
-    const res = await fetch('/it-logger/techs', {
-      method: 'POST',
-      body: JSON.stringify(tech),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await res.json();
+    const { data } = await authAxios.post('/techs', tech);
+
     dispatch({
       type: ADD_TECH,
       payload: data,
@@ -90,19 +79,11 @@ export const addTech = (tech) => async (dispatch) => {
   }
 };
 
-export const setTech = (tech) => {
-  return {
-    type: SET_TECH,
-    payload: tech,
-  };
-};
-
 export const deleteTech = (id) => async (dispatch) => {
   try {
     setLoading();
-    await fetch(`/it-logger/techs/${id}`, {
-      method: 'DELETE',
-    });
+    await authAxios.delete(`/techs/${id}`);
+
     dispatch({
       type: DELETE_TECH,
       payload: id,
@@ -111,4 +92,10 @@ export const deleteTech = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({ type: TECHS_ERROR, payload: error.response.statusText });
   }
+};
+export const setTech = (tech) => {
+  return {
+    type: SET_TECH,
+    payload: tech,
+  };
 };

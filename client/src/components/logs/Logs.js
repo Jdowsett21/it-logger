@@ -5,12 +5,13 @@ import LogItem from './LogItem';
 import PropTypes from 'prop-types';
 import { getLogs } from '../../actions/logActions.js';
 import { getTechs } from '../../actions/techActions.js';
+import { setAuthInfo } from '../../actions/authActions';
 
-function Logs({ log: { logs, loading }, getLogs, getTechs }) {
+function Logs({ log: { logs, loading }, getLogs, setAuthInfo, getTechs }) {
   useEffect(() => {
     getLogs();
     getTechs();
-
+    // setAuthInfo();
     //eslint-disable-next-line
   }, []);
 
@@ -34,9 +35,13 @@ function Logs({ log: { logs, loading }, getLogs, getTechs }) {
 Logs.propTypes = {
   log: PropTypes.object.isRequired,
   getLogs: PropTypes.func.isRequired,
+  setAuthInfo: PropTypes.func.isRequired,
+  getTechs: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   log: state.log,
 });
 //then we need to pass it into connect
-export default connect(mapStateToProps, { getLogs, getTechs })(Logs);
+export default connect(mapStateToProps, { setAuthInfo, getLogs, getTechs })(
+  Logs
+);

@@ -6,6 +6,7 @@ function TechSelectOptions({ getTechs, tech: { techs, loading }, category }) {
     getTechs();
     //eslint-disable-next-line
   }, []);
+
   return (
     !loading &&
     techs !== null &&

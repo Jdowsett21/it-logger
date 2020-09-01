@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import TechSelectOptions from '../techs/TechSelectOptions';
 import { connect } from 'react-redux';
 import { addLog } from '../../actions/logActions';
 import { getTechs } from '../../actions/techActions';
+import { isUserAuthenticated } from '../../actions/authActions';
 import CategorySelectOptions from './CategorySelectOptions';
 
 function AddLogModal({ addLog }) {
@@ -11,6 +12,14 @@ function AddLogModal({ addLog }) {
   const [attention, setAttention] = useState(false);
   const [tech, setTech] = useState('');
   const [category, setCategories] = useState('');
+
+  useEffect(() => {
+    isUserAuthenticated();
+    setMessage('');
+    setTech('');
+    setCategories('');
+    setAttention(false);
+  }, []);
 
   const onSubmit = () => {
     if (message === '' || tech === '') {
@@ -24,9 +33,9 @@ function AddLogModal({ addLog }) {
         date: new Date(),
       };
 
+      addLog(newLog);
       M.toast({ html: `Log added by ${tech}` });
 
-      addLog(newLog);
       setMessage('');
       setTech('');
       setCategories('');
@@ -115,4 +124,6 @@ const modalStyle = {
   height: '75%',
 };
 
-export default connect(null, { addLog, getTechs })(AddLogModal);
+export default connect(null, { isUserAuthenticated, addLog, getTechs })(
+  AddLogModal
+);
