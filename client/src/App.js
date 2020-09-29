@@ -52,7 +52,7 @@ function App() {
   //   useEffect(() => {
   //     M.AutoInit();
   //   });
-
+  console.log('hello');
   return (
     <Router>
       // {/* <Provider store={store}>
