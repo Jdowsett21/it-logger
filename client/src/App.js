@@ -54,17 +54,17 @@ function App() {
   //   });
 
   return (
-    <div>hello</div>
-    // <Router>
-    //   {/* <Provider store={store}>
+    <Router>
+      // {/* <Provider store={store}>
     //     <FetchProvider> */}
-    // <Route exact path='/'>
-    //   <Home />
-    // </Route>
-    //       {/* <AppRoutes />
+      <Route exact path='/'>
+        <Home />
+      </Route>
+      // {/* <AppRoutes />
     //     </FetchProvider>
     //   </Provider> */}
-    // </Router>
+      //{' '}
+    </Router>
   );
 }
 
