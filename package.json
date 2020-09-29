@@ -9,7 +9,10 @@
     "client": "npm start --prefix client",
     "clientinstall": "npm install --prefix client",
     "test": "env-cmd -f ./config/test.env jest --watchAll --runInBand",
-    "dev": " env-cmd -f ./config/.env.development.local  concurrently \"npm run server\" \"npm run client\""
+    "dev": " env-cmd -f ./config/.env.development.local  concurrently \"npm run server\" \"npm run client\"",
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
