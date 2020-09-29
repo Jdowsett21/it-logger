@@ -10,7 +10,7 @@ function Home({
 }) {
   useEffect(() => {
     isUserAuthenticated();
-    setAuthInfo();
+    // setAuthInfo();
   }, [expiresAt]);
 
   return (

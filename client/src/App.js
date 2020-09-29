@@ -2,7 +2,6 @@ import React, { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { Provider } from 'react-redux';
-import { FetchProvider } from './context/FetchContext';
 
 import store from './store';
 import './App.css';
@@ -59,9 +58,7 @@ function App() {
   return (
     <Router>
       <Provider store={store}>
-        <FetchProvider>
-          <AppRoutes />
-        </FetchProvider>
+        <AppRoutes />
       </Provider>
     </Router>
   );
