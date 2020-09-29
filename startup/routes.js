@@ -3,6 +3,7 @@ const logs = require('../routes/logs');
 const techs = require('../routes/techs');
 const auth = require('../routes/auth');
 const users = require('../routes/users');
+const express = require('express');
 //middleware
 const cors = require('cors');
 const bodyParser = require('body-parser');
