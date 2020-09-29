@@ -15,55 +15,56 @@ import Signup from './pages/Signup';
 import Home from './pages/Home';
 import AuthenticatedRoutes from './AuthenticatedRoutes';
 
-const Dashboard = lazy(() => import('./pages/Dashboard'));
+// const Dashboard = lazy(() => import('./pages/Dashboard'));
 
-const LoadingFallback = () => (
-  <AppShell>
-    <div className='p-4'>Loading...</div>
-  </AppShell>
-);
-const UnauthenticatedRoutes = () => (
-  <Switch>
-    <Route exact path='/signup'>
-      <Signup />
-    </Route>
-    <Route exact path='/login'>
-      <Login />
-    </Route>
-    <Route exact path='/'>
-      <Home />
-    </Route>
-  </Switch>
-);
+// const LoadingFallback = () => (
+//   <AppShell>
+//     <div className='p-4'>Loading...</div>
+//   </AppShell>
+// );
+// const UnauthenticatedRoutes = () => (
+//   <Switch>
+//     <Route exact path='/signup'>
+//       <Signup />
+//     </Route>
+//     <Route exact path='/login'>
+//       <Login />
+//     </Route>
+//   </Switch>
+// );
 
-const AppRoutes = () => {
-  return (
-    <React.Fragment>
-      <Suspense fallback={<LoadingFallback />}>
-        <Switch>
-          <AuthenticatedRoutes path='/dashboard'>
-            <Dashboard />
-          </AuthenticatedRoutes>
-          <UnauthenticatedRoutes />
-        </Switch>
-      </Suspense>
-    </React.Fragment>
-  );
-};
+// const AppRoutes = () => {
+//   return (
+//     <React.Fragment>
+//       <Suspense fallback={<LoadingFallback />}>
+//         <Switch>
+//           <AuthenticatedRoutes path='/dashboard'>
+//             <Dashboard />
+//           </AuthenticatedRoutes>
+//           <UnauthenticatedRoutes />
+//         </Switch>
+//       </Suspense>
+//     </React.Fragment>
+//   );
+// };
 function App() {
-  //initializes materialize javascript
-  useEffect(() => {
-    M.AutoInit();
-  });
+  //   //initializes materialize javascript
+  //   useEffect(() => {
+  //     M.AutoInit();
+  //   });
 
   return (
-    <Router>
-      <Provider store={store}>
-        <FetchProvider>
-          <AppRoutes />
-        </FetchProvider>
-      </Provider>
-    </Router>
+    <div>hello</div>
+    // <Router>
+    //   {/* <Provider store={store}>
+    //     <FetchProvider> */}
+    // <Route exact path='/'>
+    //   <Home />
+    // </Route>
+    //       {/* <AppRoutes />
+    //     </FetchProvider>
+    //   </Provider> */}
+    // </Router>
   );
 }
 
