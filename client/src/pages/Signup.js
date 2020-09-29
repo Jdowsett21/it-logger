@@ -42,7 +42,7 @@ const Signup = ({
   useEffect(() => {
     isUserAuthenticated();
     return () => {
-      setAuthInfo();
+      // setAuthInfo();
       isAdmin();
     };
   }, []);

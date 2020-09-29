@@ -14,26 +14,26 @@ import {
 import { publicFetch } from '../utils/fetch';
 import { authAxios } from '../utils/authFetch';
 export const signupValidation = (credentials) => async (dispatch) => {
-  try {
-    setLoading();
-    const { data } = await publicFetch.post('auth/signup', credentials);
-    dispatch({
-      type: SIGNUP_SUCCESS,
-      payload: data,
-    });
+  // try {
+  setLoading();
+  const { data } = await publicFetch.post('auth/signup', credentials);
+  dispatch({
+    type: SIGNUP_SUCCESS,
+    payload: data,
+  });
 
-    setTimeout(() => {
-      return {
-        type: REDIRECT_ON_LOGIN,
-      };
-    }, 700);
-  } catch (err) {
-    setLoading();
-    dispatch({
-      type: SIGNUP_ERROR,
-      payload: err.data.message,
-    });
-  }
+  setTimeout(() => {
+    return {
+      type: REDIRECT_ON_LOGIN,
+    };
+  }, 700);
+  // } catch (err) {
+  //   setLoading();
+  //   dispatch({
+  //     type: SIGNUP_ERROR,
+  //     payload: err.data.message,
+  //   });
+  // }
 };
 
 export const isAdmin = () => {
