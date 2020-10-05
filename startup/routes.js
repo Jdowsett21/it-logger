@@ -37,18 +37,18 @@ module.exports = function (app) {
   app.use(attachUser);
   app.use(verifyToken);
   app.use(csrfProtection);
-  if (process.env.NODE_ENV === 'production') {
-    app.get('*', (req, res) => {
-      res.sendFile(
-        path.resolve(__dirname, '../client', 'build', 'index.html'),
-        function (err) {
-          if (err) {
-            res.status(500).send(err);
-          }
-        }
-      );
-    });
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  //   app.get('*', (req, res) => {
+  //     res.sendFile(
+  //       path.resolve(__dirname, '../client', 'build', 'index.html'),
+  //       function (err) {
+  //         if (err) {
+  //           res.status(500).send(err);
+  //         }
+  //       }
+  //     );
+  //   });
+  // }
   app.use('/api/users', users);
   app.use('/api/techs', techs);
   app.use('/api/logs', logs);
