@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
 const jwt = require('express-jwt');
-
+const path = require('path');
 //custom middleware
 const attachUser = require('../middleware/attachUser');
 
@@ -33,6 +33,7 @@ module.exports = function (app) {
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
   }
+
   app.use('/api/auth', auth);
   app.use(attachUser);
   app.use(verifyToken);
