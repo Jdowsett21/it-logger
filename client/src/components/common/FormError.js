@@ -1,7 +1,5 @@
 import React from 'react';
 
-const FormError = ({ text }) => (
-  <span className="text-red-500 text-sm">{text}</span>
-);
+const FormError = ({ text }) => <span>{text}</span>;
 
 export default FormError;

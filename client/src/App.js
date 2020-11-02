@@ -1,5 +1,10 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from 'react-router-dom';
 
 import { Provider } from 'react-redux';
 
@@ -23,14 +28,11 @@ const LoadingFallback = () => (
 );
 const UnauthenticatedRoutes = () => (
   <Switch>
-    <Route exact path='/signup'>
-      <Signup />
-    </Route>
     <Route exact path='/login'>
       <Login />
     </Route>
     <Route exact path='/'>
-      <Home />
+      <Signup />
     </Route>
   </Switch>
 );
