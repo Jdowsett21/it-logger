@@ -51,7 +51,7 @@ const Signup = ({
       {(redirectOnLogin || isAuthenticated) && <Redirect to='/dashboard' />}
       <h2>Sign up for an account</h2>
       <p>
-        Already have an account? <Hyperlink to='login' text='Log in now' />
+        Already have an account? <Hyperlink to='/login' text='Log in now' />
       </p>
       <div className='p-5'>
         <Formik

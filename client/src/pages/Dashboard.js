@@ -19,7 +19,7 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 
 function Dashboard({
   isUserAuthenticated,
-  auth: { isAuthenticated },
+  auth: { isAuthenticated, redirectOnLogin },
   setAuthInfo,
   logout,
 }) {
@@ -31,7 +31,7 @@ function Dashboard({
 
   return (
     <Fragment>
-      {isAuthenticated === false && <Redirect to='/' />}
+      {redirectOnLogin && isAuthenticated === false && <Redirect to='/' />}
 
       <AppSearchBar />
       <div className='container'>
