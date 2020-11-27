@@ -43,8 +43,8 @@ router.post(
 router.post(
   '/signup',
   asyncMiddleware(async (req, res) => {
-    const { error } = validateUser(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    // const { error } = validateUser(req.body);
+    // if (error) return res.status(400).send(error.details[0].message);
 
     const { email, firstName, lastName, password } = req.body;
 
@@ -60,8 +60,8 @@ router.post(
 
     const existingEmail = await User.findOne({ email: userData.email }).lean();
 
-    if (existingEmail)
-      return res.status(400).json({ message: 'User already exists' });
+    // if (existingEmail)
+    //   return res.status(400).json({ message: 'User already exists' });
 
     const newUser = new User(userData);
 

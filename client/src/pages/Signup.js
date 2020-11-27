@@ -42,75 +42,81 @@ const Signup = ({
   useEffect(() => {
     isUserAuthenticated();
     return () => {
-      // setAuthInfo();
+      setAuthInfo();
       isAdmin();
     };
   }, []);
   return (
-    <div className='col' style={{ maxWidth: '70%', marginLeft: '5rem' }}>
+    <>
       {(redirectOnLogin || isAuthenticated) && <Redirect to='/dashboard' />}
-      <h2>Sign up for an account</h2>
-      <p>
-        Already have an account? <Hyperlink to='/login' text='Log in now' />
-      </p>
-      <div className='p-5'>
-        <Formik
-          initialValues={{
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-          }}
-          onSubmit={(values) => signupValidation(values)}
-          validationSchema={SignupSchema}
-        >
-          {() => (
-            <Form>
-              {signupSuccess && <FormSuccess text={signupSuccess} />}
-              {signupError && <FormError text={signupError} />}
+      <div className='col' style={{ maxWidth: '70%', marginLeft: '5rem' }}>
+        <h2>Sign up for an account</h2>
+        <p>
+          Already have an account? <Hyperlink to='/login' text='Log in now' />
+        </p>
+        <div className='p-5'>
+          <Formik
+            initialValues={{
+              firstName: '',
+              lastName: '',
+              email: '',
+              password: '',
+            }}
+            onSubmit={(values) => signupValidation(values)}
+            validationSchema={SignupSchema}
+          >
+            {() => (
+              <Form>
+                {signupSuccess && <FormSuccess text={signupSuccess} />}
+                {signupError && <FormError text={signupError} />}
 
-              <Label text='First Name' />
+                <Label text='First Name' />
 
-              <FormInput
-                ariaLabel='First Name'
-                name='firstName'
-                type='text'
-                placeholder='First Name'
-              />
+                <FormInput
+                  ariaLabel='First Name'
+                  name='firstName'
+                  type='text'
+                  placeholder='First Name'
+                />
 
-              <Label text='Last Name' />
+                <Label text='Last Name' />
 
-              <FormInput
-                ariaLabel='Last Name'
-                name='lastName'
-                type='text'
-                placeholder='Last Name'
-              />
+                <FormInput
+                  ariaLabel='Last Name'
+                  name='lastName'
+                  type='text'
+                  placeholder='Last Name'
+                />
 
-              <Label text='Email address' />
+                <Label text='Email address' />
 
-              <FormInput
-                ariaLabel='Email address'
-                name='email'
-                type='email'
-                placeholder='Email address'
-              />
+                <FormInput
+                  ariaLabel='Email address'
+                  name='email'
+                  type='email'
+                  placeholder='Email address'
+                />
 
-              <Label text='Password' />
+                <Label text='Password' />
 
-              <FormInput
-                ariaLabel='Password'
-                name='password'
-                type='password'
-                placeholder='Password'
-              />
+                <FormInput
+                  ariaLabel='Password'
+                  name='password'
+                  type='password'
+                  placeholder='Password'
+                />
 
-              <GradientButton type='submit' text='Sign Up' loading={loading} />
-            </Form>
-          )}
-        </Formik>
+                <GradientButton
+                  type='submit'
+                  text='Sign Up'
+                  loading={loading}
+                />
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

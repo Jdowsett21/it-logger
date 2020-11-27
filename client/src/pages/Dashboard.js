@@ -31,7 +31,9 @@ function Dashboard({
 
   return (
     <Fragment>
-      {redirectOnLogin && isAuthenticated === false && <Redirect to='/' />}
+      {isAuthenticated === false && redirectOnLogin === false && (
+        <Redirect to='/' />
+      )}
 
       <AppSearchBar />
       <div className='container'>
